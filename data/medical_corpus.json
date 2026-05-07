@@ -1,0 +1,154 @@
+{
+  "documents": [
+    {
+      "id": "MED-001",
+      "category": "Neurologia",
+      "title": "Enxaqueca com Aura (Cefaleia Pulsátil e Fotofobia)",
+      "content": "A enxaqueca é uma cefaleia primária caracterizada por dor pulsátil unilateral de intensidade moderada a grave, frequentemente acompanhada de fotofobia, fonofobia e náusea. A fisiopatologia envolve ativação trigeminovascular com liberação de CGRP (peptídeo relacionado ao gene da calcitonina), causando vasodilatação meníngea e sensibilização periférica. O diagnóstico requer pelo menos 5 episódios com duração de 4 a 72 horas. O tratamento agudo inclui triptanos (sumatriptano 50-100 mg VO) e AINEs. A profilaxia é indicada quando há mais de 4 crises mensais, com opções incluindo topiramato, propranolol e amitriptilina."
+    },
+    {
+      "id": "MED-002",
+      "category": "Cardiologia",
+      "title": "Hipertensão Arterial Sistêmica (HAS)",
+      "content": "A hipertensão arterial sistêmica é definida por pressão arterial sistólica ≥140 mmHg e/ou diastólica ≥90 mmHg em adultos. Classifica-se em estágio 1 (140-159/90-99), estágio 2 (160-179/100-109) e estágio 3 (≥180/≥110). A fisiopatologia envolve aumento da resistência vascular periférica por disfunção endotelial, ativação do sistema renina-angiotensina-aldosterona (SRAA) e hiperatividade simpática. Complicações incluem hipertrofia ventricular esquerda, nefrosclerose, retinopatia e acidente vascular cerebral. O tratamento farmacológico de primeira linha inclui inibidores da ECA, BRAs, bloqueadores dos canais de cálcio e diuréticos tiazídicos."
+    },
+    {
+      "id": "MED-003",
+      "category": "Endocrinologia",
+      "title": "Diabetes Mellitus Tipo 2 — Critérios Diagnósticos e Manejo",
+      "content": "O diabetes mellitus tipo 2 (DM2) é caracterizado por resistência à insulina e deficiência progressiva de secreção insulínica pelas células beta pancreáticas. Os critérios diagnósticos incluem: glicemia de jejum ≥126 mg/dL, glicemia 2h pós-sobrecarga de glicose (TOTG) ≥200 mg/dL, HbA1c ≥6,5%, ou glicemia aleatória ≥200 mg/dL com sintomas clássicos. A fisiopatologia envolve o octeto ominoso de DeFronzo, incluindo lipólise acelerada, disfunção de células alfa, diminuição de incretinas e aumento da reabsorção renal de glicose. O tratamento inicia com metformina e mudança no estilo de vida, progredindo conforme meta glicêmica."
+    },
+    {
+      "id": "MED-004",
+      "category": "Pneumologia",
+      "title": "Pneumonia Adquirida na Comunidade (PAC) — Diagnóstico e Tratamento",
+      "content": "A pneumonia adquirida na comunidade (PAC) é uma infecção do parênquima pulmonar caracterizada por consolidação alveolar com exsudato inflamatório. Os agentes etiológicos mais comuns são Streptococcus pneumoniae, Haemophilus influenzae, Mycoplasma pneumoniae e vírus respiratórios. Clinicamente manifesta-se com febre, tosse produtiva com escarro purulento, dispneia, dor pleurítica e crepitações à ausculta. O diagnóstico é confirmado por radiografia de tórax mostrando infiltrado lobar ou segmentar. A estratificação de gravidade pelo índice PSI ou CURB-65 orienta a necessidade de hospitalização. O tratamento empírico ambulatorial inclui amoxicilina ou azitromicina."
+    },
+    {
+      "id": "MED-005",
+      "category": "Cirurgia Geral",
+      "title": "Apendicite Aguda — Diagnóstico Clínico e Cirúrgico",
+      "content": "A apendicite aguda é a causa mais comum de abdome agudo cirúrgico, resultante de obstrução do lúmen apendicular por fecalito, hiperplasia linfoide ou corpo estranho, com subsequente distensão, isquemia e proliferação bacteriana. O quadro clínico clássico inicia com dor periumbilical migrando para a fossa ilíaca direita (FID), acompanhada de anorexia, náusea, febre baixa e leucocitose. O sinal de McBurney (dor à palpação no ponto entre o umbigo e a espinha ilíaca ântero-superior direita) e o sinal de Blumberg (dor à descompressão brusca) são patognomônicos. O escore de Alvarado ≥7 tem alta sensibilidade diagnóstica. O tratamento é a apendicectomia laparoscópica de emergência."
+    },
+    {
+      "id": "MED-006",
+      "category": "Cardiologia",
+      "title": "Infarto Agudo do Miocárdio com Supradesnivelamento de ST (IAMCSST)",
+      "content": "O infarto agudo do miocárdio com supradesnivelamento de ST (IAMCSST) resulta da oclusão coronariana total e súbita, levando à necrose isquêmica do miocárdio. O diagnóstico requer supradesnivelamento de ST ≥1 mm em duas derivações contíguas ou novo bloqueio de ramo esquerdo, associado a elevação de biomarcadores cardíacos (troponina de alta sensibilidade). Clinicamente manifesta-se com dor precordial em aperto irradiando para o membro superior esquerdo, sudorese fria, dispneia e ansiedade. A reperfusão coronariana é a pedra angular do tratamento: angioplastia primária (ICP) é preferida quando disponível em até 120 minutos; fibrinólise está indicada quando ICP não é factível em tempo hábil. O tratamento adjunto inclui AAS, clopidogrel e anticoagulação."
+    },
+    {
+      "id": "MED-007",
+      "category": "Pneumologia",
+      "title": "Asma Brônquica — Fisiopatologia e Controle",
+      "content": "A asma brônquica é uma doença inflamatória crônica das vias aéreas caracterizada por hiper-reatividade brônquica, inflamação eosinofílica mediada por linfócitos Th2, hipersecreção de muco e remodelamento da via aérea. Os mediadores inflamatórios envolvidos incluem interleucinas IL-4, IL-5, IL-13, leucotrienos e histamina. Clinicamente manifesta-se com dispneia paroxística, sibilância expiratória, aperto no peito e tosse, especialmente noturna. O diagnóstico é confirmado por espirometria demonstrando obstrução reversível (aumento do VEF1 ≥12% após broncodilatador). O controle é classificado em controlada, parcialmente controlada e não controlada pela GINA. O tratamento escalonado inclui beta-2 agonistas de curta ação (SABA) para alívio e corticosteroides inalatórios (CSI) para controle."
+    },
+    {
+      "id": "MED-008",
+      "category": "Psiquiatria",
+      "title": "Transtorno Depressivo Maior — Critérios DSM-5 e Farmacoterapia",
+      "content": "O transtorno depressivo maior (TDM) é caracterizado pelo DSM-5 por cinco ou mais dos seguintes sintomas durante 2 semanas: humor deprimido, anedonia, alteração de peso/apetite, insônia ou hipersonia, agitação ou retardo psicomotor, fadiga, sentimentos de inutilidade ou culpa excessiva, dificuldade de concentração e pensamentos de morte ou suicídio. Ao menos um dos sintomas deve ser humor deprimido ou anedonia. A fisiopatologia envolve desregulação dos sistemas monoaminérgicos (serotonina, noradrenalina, dopamina), disfunção do eixo HPA e neuroinflamação. O tratamento farmacológico de primeira linha inclui inibidores seletivos da recaptação de serotonina (ISRS), com resposta esperada em 4-6 semanas."
+    },
+    {
+      "id": "MED-009",
+      "category": "Reumatologia",
+      "title": "Artrite Reumatoide — Diagnóstico e Drogas Modificadoras",
+      "content": "A artrite reumatoide (AR) é uma doença autoimune sistêmica caracterizada por sinovite erosiva simétrica, predominantemente nas articulações metacarpofalangianas, interfalangianas proximais e punhos. A patogênese envolve ativação de linfócitos T CD4+ autorreativos, produção de anticorpos (fator reumatoide e anti-CCP) e inflamação mediada por TNF-α, IL-1 e IL-6. Os critérios ACR/EULAR 2010 pontuam número de articulações acometidas, sorologias, PCR/VHS e duração dos sintomas (≥6 semanas). O tratamento visa remissão ou baixa atividade de doença: metotreato é a DMARD-convencional de escolha; falha indica DMARDs biológicas (anti-TNF, anti-IL-6, anti-CD20)."
+    },
+    {
+      "id": "MED-010",
+      "category": "Nefrologia",
+      "title": "Doença Renal Crônica — Estadiamento e Progressão",
+      "content": "A doença renal crônica (DRC) é definida como alterações estruturais ou funcionais renais por mais de 3 meses, manifestada por taxa de filtração glomerular (TFG) <60 mL/min/1,73 m² ou marcadores de lesão renal (proteinúria, hematúria glomerular, alterações histológicas). O estadiamento pelo KDIGO combina TFG (G1-G5) e albuminúria (A1-A3). As principais causas são nefropatia diabética, nefrosclerose hipertensiva e glomerulopatias. As complicações incluem anemia normocrômica (deficiência de EPO), hiperparatireoidismo secundário, acidose metabólica hiperclorêmica e hipercalemia. O tratamento visa retardar a progressão com controle pressórico rigoroso (IECA/BRA) e glicêmico."
+    },
+    {
+      "id": "MED-011",
+      "category": "Neurologia",
+      "title": "Acidente Vascular Cerebral Isquêmico — Diagnóstico e Trombólise",
+      "content": "O acidente vascular cerebral (AVC) isquêmico resulta da oclusão arterial focal, com déficit neurológico focal súbito correspondente ao território vascular acometido. Os subtipos etiológicos pela classificação TOAST incluem aterosclerose de grandes artérias, cardioembolismo (fibrilação atrial é a principal causa), oclusão de pequenas artérias (lacunar), outras etiologias e indeterminado. O diagnóstico neuroimagiológico por TC de crânio exclui hemorragia; a RM com DWI demonstra a área de isquemia precocemente. A janela para trombólise endovenosa com alteplase (rt-PA) é de até 4,5 horas do início dos sintomas. A trombectomia mecânica é indicada em oclusão de grandes vasos até 24 horas em pacientes selecionados."
+    },
+    {
+      "id": "MED-012",
+      "category": "Endocrinologia",
+      "title": "Hipotireoidismo Primário — Diagnóstico Laboratorial e Reposição",
+      "content": "O hipotireoidismo primário resulta da insuficiência da glândula tireoide em produzir hormônios tireoidianos adequados, levando à elevação compensatória do TSH pela hipófise. A causa mais comum nos países desenvolvidos é a tireoidite de Hashimoto (autoimune), com presença de anticorpos anti-TPO e anti-tireoglobulina. Clinicamente manifesta-se com fadiga, ganho de peso, intolerância ao frio, bradicardia, constipação, pele seca, queda de cabelo, edema facial e mixedema. O diagnóstico laboratorial mostra TSH elevado e T4 livre reduzido. Em hipotireoidismo subclínico, TSH elevado com T4 livre normal. O tratamento é a reposição com levotiroxina (L-T4), com dose ajustada pela normalização do TSH."
+    },
+    {
+      "id": "MED-013",
+      "category": "Gastroenterologia",
+      "title": "Doença do Refluxo Gastroesofágico (DRGE) e Esofagite Erosiva",
+      "content": "A doença do refluxo gastroesofágico (DRGE) é definida pelo refluxo de conteúdo gástrico para o esôfago causando sintomas ou lesões mucosas. A incompetência do esfíncter esofágico inferior (EEI) e a hérnia de hiato são os principais mecanismos fisiopatológicos. Sintomas típicos incluem pirose retroesternal e regurgitação ácida; sintomas atípicos incluem tosse crônica, rouquidão e dor torácica não cardíaca. A endoscopia digestiva alta classifica a esofagite pela classificação de Los Angeles (A-D). Complicações incluem estenose péptica, esôfago de Barrett e adenocarcinoma. O tratamento farmacológico com inibidores da bomba de prótons (IBP) é a primeira linha."
+    },
+    {
+      "id": "MED-014",
+      "category": "Cardiologia",
+      "title": "Síndrome Coronariana Aguda sem Supradesnivelamento de ST (SCASSST)",
+      "content": "A síndrome coronariana aguda sem supradesnivelamento de ST (SCASSST) compreende a angina instável e o IAMSSST, diferenciados pela presença de elevação de troponina. A fisiopatologia envolve ruptura ou erosão de placa aterosclerótica com formação de trombo não oclusivo. O diagnóstico utiliza a troponina de alta sensibilidade em protocolo de 0h/1h ou 0h/3h para descarte rápido. A estratificação de risco pelo escore GRACE orienta a estratégia invasiva (coronariografia precoce em alto risco versus conservadora). O tratamento antitrombótico inclui dupla antiagregação plaquetária (AAS + inibidor P2Y12) e anticoagulação parenteral."
+    },
+    {
+      "id": "MED-015",
+      "category": "Reumatologia",
+      "title": "Fibromialgia — Critérios Diagnósticos e Abordagem Multimodal",
+      "content": "A fibromialgia é uma síndrome de sensibilização central caracterizada por dor musculoesquelética difusa crônica, fadiga, distúrbios do sono e disfunção cognitiva (fibrofog). Os critérios ACR 2010/2016 utilizam o índice de dor generalizada (IDG) e a escala de gravidade de sintomas (EGS), sem exigir pontos dolorosos à palpação. A fisiopatologia envolve amplificação central da dor por disfunção de neurotransmissores (substância P elevada, serotonina reduzida) e anormalidades na modulação descendente da dor. O diagnóstico é clínico, com exclusão de condições inflamatórias. O tratamento multimodal combina exercício aeróbico, terapia cognitivo-comportamental e farmacoterapia (duloxetina, pregabalina, amitriptilina)."
+    },
+    {
+      "id": "MED-016",
+      "category": "Pneumologia",
+      "title": "Doença Pulmonar Obstrutiva Crônica (DPOC) — Estadiamento GOLD",
+      "content": "A doença pulmonar obstrutiva crônica (DPOC) é caracterizada por limitação persistente ao fluxo aéreo, parcialmente reversível, secundária a resposta inflamatória anormal das vias aéreas e parênquima pulmonar a partículas nocivas, principalmente fumaça de tabaco. A espirometria pós-broncodilatador com VEF1/CVF <0,70 confirma a obstrução. O estadiamento GOLD classifica a gravidade em G1-G4 pelo VEF1 e o risco clínico pelos grupos A-D pela frequência de exacerbações e sintomas (mMRC/CAT). O enfisema panacinar predomina na deficiência de alfa-1 antitripsina. O tratamento inclui broncodilatadores de longa ação (LABA/LAMA), corticosteroides inalatórios em casos selecionados e cessação tabágica."
+    },
+    {
+      "id": "MED-017",
+      "category": "Neurologia",
+      "title": "Epilepsia — Classificação das Crises e Farmacoterapia",
+      "content": "A epilepsia é definida como duas ou mais crises epilépticas não provocadas com intervalo superior a 24 horas, ou uma crise com risco de recorrência >60%. A classificação ILAE 2017 divide as crises em focais (com ou sem alteração da consciência, com ou sem generalização secundária), generalizadas (tônico-clônicas, ausência, mioclônicas) e de início desconhecido. O EEG e a RM de crânio são fundamentais na investigação. O estado de mal epiléptico (crise >5 minutos) exige tratamento de emergência com benzodiazepínico IV. O tratamento crônico com fármacos antiepilépticos (FAEs) é individualizado: valproato para epilepsias generalizadas; lamotrigina, levetiracetam ou carbamazepina para focais."
+    },
+    {
+      "id": "MED-018",
+      "category": "Reumatologia",
+      "title": "Lúpus Eritematoso Sistêmico (LES) — Manifestações e Imunologia",
+      "content": "O lúpus eritematoso sistêmico (LES) é uma doença autoimune sistêmica com produção de autoanticorpos contra antígenos nucleares, causando lesão tecidual por deposição de imunocomplexos. O anticorpo anti-DNA de dupla fita (anti-dsDNA) e o anti-Sm são altamente específicos. Os critérios classificatórios ACR/EULAR 2019 somam pontos por domínios clínicos (cutâneo, articular, seroso, neuropsiquiátrico, hematológico, renal) e imunológicos. A nefrite lúpica ocorre em 50% dos pacientes e é principal causa de morbidade; a biópsia renal classifica em classes I-VI pela OMS. O tratamento inclui cloroquina para todos os pacientes, corticosteroides para atividade e imunossupressores (micofenolato, azatioprina) para órgãos alvo."
+    },
+    {
+      "id": "MED-019",
+      "category": "Medicina Intensiva",
+      "title": "Sepse e Choque Séptico — Critérios Sepsis-3 e Bundle de Tratamento",
+      "content": "A sepse é definida pelos critérios Sepsis-3 como disfunção orgânica ameaçadora à vida secundária a resposta desregulada do hospedeiro à infecção, com aumento do escore SOFA ≥2 pontos. O choque séptico é definido por necessidade de vasopressor para manter PAM ≥65 mmHg com lactato >2 mmol/L na ausência de hipovolemia. O QSOFA (alteração do estado mental, FR ≥22 irpm, PAS ≤100 mmHg) é ferramenta de triagem fora da UTI. O bundle de tratamento da Surviving Sepsis Campaign 2018 (hora 1) inclui: hemoculturas antes de antibióticos, antibioticoterapia de amplo espectro, 30 mL/kg de cristaloide IV para hipotensão ou lactato ≥4 mmol/L, vasopressores para PAM <65 mmHg e monitorização do lactato."
+    },
+    {
+      "id": "MED-020",
+      "category": "Hematologia/Vascular",
+      "title": "Trombose Venosa Profunda (TVP) — Diagnóstico e Anticoagulação",
+      "content": "A trombose venosa profunda (TVP) resulta da formação de trombo nos segmentos venosos profundos, predominantemente nos membros inferiores, pela tríade de Virchow: estase venosa, hipercoagulabilidade e lesão endotelial. Clinicamente manifesta-se com edema, calor, eritema e dor à dorsiflexão do pé (sinal de Homans, baixa especificidade). O escore de Wells estima a probabilidade pré-teste; D-dímero negativo exclui TVP em baixo/médio risco; ultrassonografia com Doppler compressivo é o exame de imagem de escolha. A anticoagulação com heparina de baixo peso molecular (HBPM) ou anticoagulante oral direto (DOAC) é iniciada imediatamente no diagnóstico. Filtro de veia cava está indicado em contraindicação à anticoagulação."
+    },
+    {
+      "id": "MED-021",
+      "category": "Gastroenterologia",
+      "title": "Pancreatite Aguda — Classificação de Gravidade e Manejo",
+      "content": "A pancreatite aguda é a inflamação aguda do pâncreas com ativação prematura de enzimas digestivas intracelulares, causando autodigestão do tecido pancreático e peripancreático. As causas mais comuns são colelitíase (40-70%) e álcool (25-35%). A classificação de Atlanta revisada divide em leve (sem falência orgânica ou complicações locais), moderamente grave (falência orgânica transitória <48h ou complicações locais) e grave (falência orgânica persistente >48h). Os critérios de Ranson, APACHE-II e BISAP avaliam prognóstico. O tratamento inclui jejum, hidratação venosa agressiva com cristaloide, analgesia e suporte nutricional enteral precoce. Colangiopancreatografia retrógrada endoscópica (CPRE) está indicada na pancreatite biliar com colangite."
+    },
+    {
+      "id": "MED-022",
+      "category": "Infectologia/Neurologia",
+      "title": "Meningite Bacteriana Aguda — Diagnóstico e Tratamento de Emergência",
+      "content": "A meningite bacteriana aguda é a inflamação das meninges causada por bactérias, com elevada morbimortalidade. A tríade clássica (febre, rigidez de nuca e alteração do nível de consciência) está presente em apenas 44% dos casos. Sinais meníngeos incluem Kernig (resistência à extensão do joelho com quadril fletido) e Brudzinski (flexão involuntária dos joelhos ao fletir o pescoço). O agente etiológico varia com a faixa etária: Neisseria meningitidis e Streptococcus pneumoniae predominam em adultos jovens. A análise do líquor (LCR) é diagnóstica: aspecto turvo, pleocitose >1000 cél/mm³ com predomínio de neutrófilos, proteinorraquia elevada e glicorraquia reduzida (<40% da glicemia). O tratamento imediato inclui ceftriaxona IV e dexametasona."
+    },
+    {
+      "id": "MED-023",
+      "category": "Cardiologia",
+      "title": "Insuficiência Cardíaca com Fração de Ejeção Reduzida (ICFEr)",
+      "content": "A insuficiência cardíaca com fração de ejeção reduzida (ICFEr) é definida por FE <40% ao ecocardiograma, resultante de remodelamento cardíaco patológico com dilatação ventricular e perda de cardiomiócitos. A fisiopatologia envolve ativação neuro-hormonal maladaptativa do SRAA e sistema nervoso simpático, levando a vasoconstrição, retenção de sódio e apoptose de cardiomiócitos. Clinicamente manifesta-se com dispneia aos esforços progredindo ao repouso, ortopneia, dispneia paroxística noturna e edema de membros inferiores. A classificação funcional NYHA (I-IV) quantifica a limitação. O tratamento baseado em evidências (os quatro pilares) inclui IECA/BRA/ARNI, betabloqueador, antagonista mineralocorticoide e iSGLT2."
+    },
+    {
+      "id": "MED-024",
+      "category": "Endocrinologia",
+      "title": "Hipoglicemia — Classificação, Fisiopatologia e Manejo Agudo",
+      "content": "A hipoglicemia é definida pela tríade de Whipple: sintomas compatíveis, glicemia <70 mg/dL e resolução dos sintomas após correção glicêmica. Classifica-se em nível 1 (54-70 mg/dL), nível 2 (<54 mg/dL, clinicamente significativa) e nível 3 (hipoglicemia grave com alteração cognitiva). Os sintomas adrenérgicos (taquicardia, diaforese, tremores, ansiedade) precedem os neuroglicopênicos (confusão, convulsão, coma). Em pacientes conscientes, a regra 15-15 orienta: 15g de carboidrato de rápida absorção, reavaliar em 15 minutos. Na hipoglicemia grave com inconsciência: glucagon 1 mg IM/SC ou dextrose 50% IV (25 mL). A principal causa é o uso de insulina ou sulfoniluреias em diabéticos."
+    },
+    {
+      "id": "MED-025",
+      "category": "Imunologia/Emergência",
+      "title": "Anafilaxia — Fisiopatologia e Tratamento com Epinefrina",
+      "content": "A anafilaxia é uma reação de hipersensibilidade grave, potencialmente fatal, resultante da liberação sistêmica massiva de mediadores de mastócitos e basófilos, classicamente mediada por IgE. Os alérgenos mais comuns incluem alimentos (amendoim, nozes, frutos do mar), medicamentos (betalactâmicos, AINEs) e veneno de himenópteros. O diagnóstico é clínico: início súbito após exposição a alérgeno com acometimento de pele/mucosas mais pelo menos um de: comprometimento respiratório, hipotensão ou sintomas gastrointestinais persistentes. A escala de gravidade divide em graus I-IV. O tratamento de primeira linha é a epinefrina 0,3-0,5 mg IM na face anterolateral da coxa (1:1000), repetível a cada 5-15 minutos. Posicionamento em Trendelenburg, oxigenioterapia e acesso venoso são medidas adjuntas."
+    }
+  ]
+}
