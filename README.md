@@ -1,23 +1,35 @@
 # RAG Advanced Medical Assistant
 
-Pipeline de Retrieval-Augmented Generation (RAG) de nível de produção para busca em manuais médicos. Transforma queries coloquiais de pacientes em buscas precisas sobre terminologia clínica técnica, combinando três técnicas avançadas: **HNSW**, **HyDE** e **Cross-Encoder**.
+**Laboratório 09 — Arquitetura RAG Avançada (HNSW, HyDE e Cross-Encoders)**
+**Disciplina:** Processamento de Linguagem Natural — 7º Período
+**Autor:** José Lucas Silva Souza
+
+---
+
+## Contexto do Problema
+
+Quando um paciente digita uma query coloquial como *"dor de cabeça latejante e luz incomodando"*, a similaridade de cosseno pura falha: o espaço vetorial das perguntas informais é geometricamente distante do jargão técnico dos manuais médicos (*"cefaleia pulsátil e fotofobia"*). Este pipeline intercepta a pergunta, usa um LLM para gerar uma ponte semântica (HyDE), busca rapidamente em um grafo hierárquico (HNSW) e refina a precisão com atenção cruzada (Cross-Encoder) antes de entregar os documentos ao LLM gerador.
+
+---
 
 ## Arquitetura do Pipeline
 
 ```
 Query Coloquial do Paciente
         │
-        ▼  [Passo 2] HyDE
-   LLM (gemini-2.0-flash) gera Documento Hipotético técnico
+        ▼  [Passo 2] HyDE — Query Transformation
+   LLM gera Documento Hipotético técnico
+   (llama-3.1-8b via Groq  OU  flan-t5-base local)
         │
-        ▼  embed (paraphrase-multilingual-MiniLM-L12-v2, local)
-   Vetor normalizado do Doc. Hipotético
+        ▼  Embedding local
+   (paraphrase-multilingual-MiniLM-L12-v2, dim=384)
+   Vetor normalizado — nova âncora geométrica
         │
-        ▼  [Passo 3] Bi-Encoder — HNSW (FAISS)
-   Top-10 Candidatos (funil largo)
+        ▼  [Passo 3] Bi-Encoder — Busca HNSW (FAISS)
+   Top-10 Candidatos  ←  funil largo, O(log N)
         │
         ▼  [Passo 4] Cross-Encoder (ms-marco-MiniLM-L-6-v2)
-   Top-3 Documentos Finais
+   Top-3 Documentos Finais  ←  filtro fino, atenção cruzada
         │
         ▼
    Contexto injetado no LLM Gerador
@@ -27,109 +39,123 @@ Query Coloquial do Paciente
 
 ## Passo 1 — Construção e Indexação do Grafo HNSW
 
-O corpus contém **25 fragmentos de manuais médicos** cobrindo especialidades como Neurologia, Cardiologia, Endocrinologia, Pneumologia e outras. Os textos utilizam terminologia clínica técnica (ex: "cefaleia pulsátil", "fotofobia", "fisiopatologia trigeminovascular").
+O corpus contém **25 fragmentos de manuais médicos** em português, cobrindo Neurologia, Cardiologia, Endocrinologia, Pneumologia, Reumatologia, entre outras especialidades. Os textos foram gerados com terminologia clínica técnica precisa.
 
-Os fragmentos são convertidos em vetores densos com o modelo `paraphrase-multilingual-MiniLM-L12-v2` (HuggingFace/sentence-transformers, dimensão 384, suporte nativo ao português) e indexados em um `faiss.IndexHNSWFlat` com similaridade de cosseno (produto interno de vetores normalizados). O modelo roda localmente, sem necessidade de API key.
+Os fragmentos são convertidos em vetores densos pelo modelo local `paraphrase-multilingual-MiniLM-L12-v2` (sentence-transformers, dimensão 384, suporte nativo ao português) e indexados em um `faiss.IndexHNSWFlat` com produto interno — equivalente a similaridade de cosseno após normalização dos vetores.
 
-### Análise: Hiperparâmetros HNSW (M e ef_construction) vs RAM em KNN Exato
+```python
+index = faiss.IndexHNSWFlat(384, M=16, faiss.METRIC_INNER_PRODUCT)
+index.hnsw.efConstruction = 200
+index.hnsw.efSearch = 50
+```
 
-#### KNN Exato — Baseline de Memória
+### Tarefa Analítica: Hiperparâmetros HNSW (M e ef_construction) vs RAM em KNN Exato
 
-Na busca KNN exata, todos os N vetores de dimensão D são armazenados em uma matriz densa. A busca compara a query com **todos** os vetores:
+#### KNN Exato — Baseline
+
+Na busca K-Nearest Neighbors exata, todos os N vetores ficam em memória e a busca compara a query com **todos** eles:
 
 ```
 RAM (KNN exato) = N × D × 4 bytes
 
-Exemplo: N=1.000.000 vetores, D=384 (paraphrase-multilingual-MiniLM-L12-v2)
+Exemplo: N=1.000.000 vetores, D=384
   → 1.000.000 × 384 × 4 = 1.536 MB ≈ 1,5 GB
-  Tempo de busca: O(N×D) — linear, lento para N grande.
+  Tempo de busca: O(N × D) — escala linearmente, inviável para N grande.
 ```
 
-#### HNSW — Estrutura em Grafo Hierárquico
+#### HNSW — Grafo Hierárquico Multicamada
 
-O HNSW (Hierarchical Navigable Small World) constrói um grafo multicamada. Na camada mais alta há poucos nós altamente conectados (busca grossa); nas camadas inferiores, todos os nós com conexões locais (refinamento). A busca navega do topo ao fundo em tempo **O(log N)**.
+O HNSW constrói um grafo em camadas: a camada superior tem poucos nós altamente conectados (navegação grossa); as camadas inferiores têm todos os nós com conexões locais (refinamento fino). A busca entra pelo topo e desce em tempo **O(log N)**.
 
-A memória do HNSW tem dois componentes:
+A memória tem dois componentes:
 
 ```
-1. Armazenamento dos vetores: N × D × 4 bytes  (igual ao KNN)
-2. Overhead do grafo:         N × M × camadas × 4 bytes
+RAM (HNSW) = vetores + overhead do grafo
 
-RAM (HNSW) ≈ N × (D + M × log(N)) × 4 bytes
+  Vetores:  N × D × 4 bytes          (igual ao KNN)
+  Grafo:    N × M × n_camadas × 4 bytes
 
-Exemplo: N=1.000.000, D=384, M=16
+Exemplo: N=1.000.000, D=384, M=16, n_camadas≈20
   Vetores:  1.536 MB
-  Grafo:    1.000.000 × 16 × 20 camadas × 4 ≈ 1.280 MB
-  Total:    ≈ 2.816 MB ≈ 2,8 GB  (+83% sobre KNN exato)
+  Grafo:    1.000.000 × 16 × 20 × 4 ≈ 1.280 MB
+  Total:    ≈ 2.816 MB ≈ 2,8 GB
 ```
 
-#### Impacto de M
+#### Impacto do hiperparâmetro M
 
-| M | Arestas por nó | Overhead RAM | Recall@10 | Velocidade de Busca |
-|---|----------------|--------------|-----------|---------------------|
-| 8 | 8 × layers | Baixo (+10%) | ~95% | Mais rápida |
-| **16** | **16 × layers** | **Médio (+20%)** | **~98%** | **Balanceada** |
-| 32 | 32 × layers | Alto (+40%) | ~99.5% | Mais lenta por nó |
-| 64 | 64 × layers | Muito alto (+80%) | ~99.9% | Próxima ao KNN |
+`M` define quantas **arestas bidirecionais** cada nó mantém em cada camada do grafo.
 
-**M** controla quantas arestas bidirecionais cada nó mantém em cada camada. Valores maiores aumentam o recall (menos falsos negativos) mas elevam o uso de RAM proporcionalmente e aumentam o tempo de busca por nó (mais vizinhos a avaliar).
+| M | Overhead de RAM | Recall@10 | Velocidade de busca |
+|---|-----------------|-----------|---------------------|
+| 8 | +10% | ~95% | Mais rápida |
+| **16 (usado)** | **+83%** | **~98%** | **Balanceada** |
+| 32 | +166% | ~99,5% | Mais lenta por nó |
+| 64 | +332% | ~99,9% | Próxima ao KNN |
 
-#### Impacto de ef_construction
+M maior → mais conexões → grafo mais denso → mais RAM → maior recall mas busca mais lenta por nó (mais vizinhos a avaliar em cada passo de navegação).
 
-**ef_construction** define o tamanho da lista de candidatos durante a construção do grafo. Ele **não afeta o uso de RAM em produção** — apenas o tempo e a qualidade da fase de build:
+#### Impacto do hiperparâmetro ef_construction
 
-| ef_construction | Tempo de Build | Qualidade do Grafo | RAM em uso |
-|----------------|----------------|---------------------|------------|
+`ef_construction` define o tamanho da **lista de candidatos durante a construção** do grafo. Ele **não afeta o consumo de RAM em produção** — apenas o tempo de build e a qualidade final do grafo:
+
+| ef_construction | Tempo de build | Qualidade do grafo | RAM em produção |
+|----------------|----------------|--------------------|-----------------|
 | 40 | Rápido | Menor precisão | Igual |
-| **200** | **Moderado** | **Alta precisão** | **Igual** |
+| **200 (usado)** | **Moderado** | **Alta precisão** | **Igual** |
 | 800 | Lento | Máxima precisão | Igual |
 
-#### Conclusão Comparativa
+ef_construction alto garante que cada nó inserido encontrou os melhores vizinhos possíveis, resultando em um grafo de maior qualidade — mas esse custo é pago uma única vez no build, não nas buscas.
+
+#### Comparação Final: HNSW vs KNN Exato
 
 ```
-                    ┌────────────────────────────────────────────┐
-                    │         KNN Exato vs HNSW                  │
-                    ├─────────────────┬──────────┬───────────────┤
-                    │ Métrica         │  KNN     │  HNSW (M=16)  │
-                    ├─────────────────┼──────────┼───────────────┤
-                    │ RAM base        │ 1,5 GB   │ 1,5 GB        │
-                    │ Overhead grafo  │ 0        │ ~1,3 GB       │
-                    │ RAM total       │ 1,5 GB   │ ~2,8 GB       │
-                    │ Tempo de busca  │ O(N×D)   │ O(log N)      │
-                    │ Recall@10       │ 100%     │ ~98%          │
-                    │ Escalável?      │ Não      │ Sim           │
-                    └─────────────────┴──────────┴───────────────┘
+┌──────────────────┬─────────────┬──────────────────┐
+│ Métrica          │  KNN Exato  │  HNSW (M=16)     │
+├──────────────────┼─────────────┼──────────────────┤
+│ RAM base         │  1,5 GB     │  1,5 GB          │
+│ Overhead grafo   │  0          │  ~1,3 GB         │
+│ RAM total        │  1,5 GB     │  ~2,8 GB         │
+│ Tempo de busca   │  O(N×D)     │  O(log N)        │
+│ Recall@10        │  100%       │  ~98%            │
+│ Escalável?       │  Não        │  Sim             │
+└──────────────────┴─────────────┴──────────────────┘
 ```
 
-**Trade-off**: HNSW paga ~20% a mais de RAM para comprar velocidade de busca 100–1000× superior e escalabilidade logarítmica. Em produção com N > 100k documentos, KNN exato é inviável; HNSW é o padrão da indústria.
+**Conclusão:** HNSW usa ~83% a mais de RAM que o armazenamento puro dos vetores (overhead do grafo), mas compra velocidade de busca 100–1000× superior e escalabilidade logarítmica. Para N > 100k documentos, KNN exato torna-se inviável; HNSW é o padrão da indústria em bancos de dados vetoriais de produção.
 
 ---
 
 ## Passo 2 — HyDE (Hypothetical Document Embeddings)
 
-**Problema**: A query coloquial `"dor de cabeça latejante e luz incomodando"` vive em uma região do espaço vetorial distante dos documentos técnicos `"cefaleia pulsátil e fotofobia"`. Similaridade de cosseno direta falha.
+**Problema:** A query coloquial `"dor de cabeça latejante e luz incomodando"` vive em uma região do espaço vetorial distante dos documentos técnicos `"cefaleia pulsátil e fotofobia"`. Similaridade de cosseno direta falha.
 
-**Solução HyDE**: O LLM é instruído a *alucinar* um trecho de manual médico técnico que responderia à pergunta. Esse Documento Hipotético usa a mesma terminologia dos documentos reais, posicionando o vetor de busca na região correta do espaço vetorial.
+**Solução HyDE:** Em vez de vetorizar a query diretamente, o LLM é instruído a *alucinar* um trecho de manual médico técnico que responderia à pergunta. Esse Documento Hipotético usa a mesma terminologia dos documentos reais, posicionando o vetor de busca na região correta do espaço vetorial:
 
 ```
-Query coloquial  →  embedding  →  vetor em região "leiga"   ← longe dos manuais
-                                                                      ↕ gap semântico
-Doc. Hipotético  →  embedding  →  vetor em região "técnica" ← próximo aos manuais ✓
+Query coloquial  →  embedding  →  região "leiga"   ← longe dos manuais
+                                                           ↕ gap semântico
+Doc. Hipotético  →  embedding  →  região "técnica" ← próximo aos manuais ✓
 ```
+
+O sistema detecta automaticamente o modo de LLM disponível:
+- **Com `GROQ_API_KEY`**: usa `llama-3.1-8b-instant` via Groq (melhor qualidade)
+- **Sem chave**: usa `google/flan-t5-base` local (zero configuração)
 
 ---
 
 ## Passo 3 — Bi-Encoder + HNSW (Funil Largo)
 
-O vetor do Documento Hipotético é usado como query no índice HNSW. O FAISS retorna os **Top-10** documentos mais próximos por similaridade de cosseno em tempo O(log N). Esse é o "funil largo": priorizamos recall (não perder documentos relevantes) sobre precisão.
+O vetor do Documento Hipotético é usado como query no índice HNSW. O FAISS retorna os **Top-10** documentos mais próximos por similaridade de cosseno em tempo O(log N). Essa etapa prioriza **recall** — não perder documentos relevantes — formando o funil largo para a próxima etapa.
+
+Os resultados são impressos no console com ID, categoria, título e score de cosseno.
 
 ---
 
 ## Passo 4 — Cross-Encoder (Filtro Fino)
 
-O Cross-Encoder `cross-encoder/ms-marco-MiniLM-L-6-v2` recebe cada par `(query_original, documento)` e computa um score de relevância com **atenção cruzada bidirecional**. Diferente do Bi-Encoder (que gera vetores independentes), o Cross-Encoder enxerga a query e o documento simultaneamente, capturando dependências contextuais mais sutis.
+O Cross-Encoder `cross-encoder/ms-marco-MiniLM-L-6-v2` recebe cada par `(query_original, documento)` no formato `[CLS] Query [SEP] Documento` e computa um score de relevância com **atenção cruzada bidirecional**. Diferente do Bi-Encoder (vetores independentes), o Cross-Encoder enxerga query e documento simultaneamente, capturando dependências contextuais mais ricas.
 
-Os 10 candidatos são reordenados pelos novos scores. Os **Top-3** finais são os fragmentos injetados no contexto do LLM gerador.
+Os 10 candidatos são reordenados pelos novos scores. Os **Top-3** finais são impressos com seus ranks originais do Bi-Encoder, evidenciando as mudanças de posição, e seriam injetados no contexto do LLM gerador.
 
 ---
 
@@ -147,25 +173,23 @@ pip install -r requirements.txt
 python main.py
 ```
 
-**Sem nenhuma configuração adicional** — o sistema roda completamente local:
-- Embeddings: `paraphrase-multilingual-MiniLM-L12-v2` (HuggingFace, local)
-- HyDE LLM: `google/flan-t5-base` (HuggingFace, local)
-- Cross-Encoder: `ms-marco-MiniLM-L-6-v2` (HuggingFace, local)
+**Sem nenhuma configuração adicional** — o sistema roda completamente local na primeira execução:
+- Embeddings: `paraphrase-multilingual-MiniLM-L12-v2` (HuggingFace, ~450 MB)
+- HyDE LLM: `google/flan-t5-base` (HuggingFace, ~990 MB)
+- Cross-Encoder: `ms-marco-MiniLM-L-6-v2` (HuggingFace, ~91 MB)
 
-Os modelos são baixados automaticamente na primeira execução (~500 MB total).
+Os modelos são baixados automaticamente. O índice HNSW é construído na primeira execução e salvo em `data/` para reutilização.
 
 ### Opcional: Groq API para HyDE de maior qualidade
 
+Crie uma conta gratuita em [console.groq.com](https://console.groq.com), gere uma API key e configure:
+
 ```bash
 cp .env.example .env
-# Insira GROQ_API_KEY (gratuito em console.groq.com)
+# Edite .env e insira: GROQ_API_KEY=gsk_...
 ```
 
-Com `GROQ_API_KEY` definida, o HyDE usa `llama-3.1-8b-instant` via Groq — melhor qualidade de geração do Documento Hipotético.
-
-Na primeira execução, o script gera os embeddings e constrói o índice HNSW (salvo em `data/`). Execuções seguintes carregam o índice do disco.
-
-Para forçar reconstrução do índice, chame `build_index(force_rebuild=True)` em `main.py`.
+Com a chave definida, o HyDE usa `llama-3.1-8b-instant` — geração de Documento Hipotético de qualidade significativamente superior.
 
 ---
 
@@ -174,18 +198,18 @@ Para forçar reconstrução do índice, chame `build_index(force_rebuild=True)` 
 ```
 .
 ├── main.py                  # Orquestração do pipeline completo
-├── requirements.txt
-├── .env.example
+├── requirements.txt         # Dependências Python
+├── .env.example             # Template de configuração
 ├── data/
-│   ├── medical_corpus.json  # 25 fragmentos de manuais médicos
-│   ├── hnsw_index.faiss     # Índice HNSW (gerado na execução)
-│   └── documents.pkl        # Documentos indexados (gerado na execução)
+│   ├── medical_corpus.json  # 25 fragmentos de manuais médicos (corpus)
+│   ├── hnsw_index.faiss     # Índice HNSW (gerado na primeira execução)
+│   └── documents.pkl        # Cache dos documentos indexados
 └── src/
-    ├── embedder.py          # Geração de embeddings (OpenAI)
-    ├── indexer.py           # Construção do índice HNSW (Passo 1)
-    ├── hyde.py              # Geração do Documento Hipotético (Passo 2)
-    ├── retriever.py         # Busca Top-10 no HNSW (Passo 3)
-    └── reranker.py          # Re-ranking Cross-Encoder Top-3 (Passo 4)
+    ├── embedder.py          # Embeddings locais via sentence-transformers
+    ├── indexer.py           # Passo 1: construção do índice HNSW com FAISS
+    ├── hyde.py              # Passo 2: geração do Documento Hipotético (HyDE)
+    ├── retriever.py         # Passo 3: busca Top-10 via Bi-Encoder no HNSW
+    └── reranker.py          # Passo 4: re-ranking Cross-Encoder → Top-3
 ```
 
 ---
