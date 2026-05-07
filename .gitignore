@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+data/hnsw_index.faiss
+data/documents.pkl
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
