@@ -162,36 +162,86 @@ Os 10 candidatos são reordenados pelos novos scores. Os **Top-3** finais são i
 
 ## Como Executar
 
-### 1. Instalar dependências
+### Pré-requisito: Python 3.10+
+
+Verifique sua versão:
+
+```bash
+python --version
+```
+
+---
+
+### Opção 1 — Executar sem API key (recomendado para teste rápido)
+
+Todos os modelos rodam localmente. Nenhuma conta ou chave necessária.
+
+**1. Clone o repositório**
+
+```bash
+git clone https://github.com/lucasrbsouza/rag-advanced-medical-assistant.git
+cd rag-advanced-medical-assistant
+```
+
+**2. Crie e ative um ambiente virtual**
+
+```bash
+python -m venv .venv
+source .venv/bin/activate        # Linux/Mac
+# .venv\Scripts\activate         # Windows
+```
+
+**3. Instale as dependências**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Executar o pipeline
+**4. Execute o pipeline**
 
 ```bash
 python main.py
 ```
 
-**Sem nenhuma configuração adicional** — o sistema roda completamente local na primeira execução:
+Na primeira execução os modelos são baixados automaticamente do HuggingFace (~1,5 GB total):
 
-- Embeddings: `paraphrase-multilingual-MiniLM-L12-v2` (HuggingFace, ~450 MB)
-- HyDE LLM: `google/flan-t5-base` (HuggingFace, ~990 MB)
-- Cross-Encoder: `ms-marco-MiniLM-L-6-v2` (HuggingFace, ~91 MB)
+- Embeddings: `paraphrase-multilingual-MiniLM-L12-v2` (~450 MB)
+- HyDE LLM: `google/flan-t5-base` (~990 MB)
+- Cross-Encoder: `ms-marco-MiniLM-L-6-v2` (~91 MB)
 
-Os modelos são baixados automaticamente. O índice HNSW é construído na primeira execução e salvo em `data/` para reutilização.
+O índice HNSW também é construído e salvo em `data/` — execuções seguintes carregam do disco e iniciam em segundos.
 
-### Opcional: Groq API para HyDE de maior qualidade
+---
 
-Crie uma conta gratuita em [console.groq.com](https://console.groq.com), gere uma API key e configure:
+### Opção 2 — Executar com Groq API (maior qualidade no HyDE)
+
+O HyDE usa `llama-3.1-8b-instant` em vez do flan-t5 local, gerando Documentos Hipotéticos de qualidade significativamente superior. A API é **gratuita** (6.000 requisições/dia, sem cartão de crédito).
+
+**1–3.** Siga os mesmos passos da Opção 1.
+
+**4. Obtenha uma API key gratuita**
+
+Acesse [console.groq.com](https://console.groq.com) → crie uma conta → **API Keys** → **Create API Key**.
+
+**5. Configure a chave**
 
 ```bash
 cp .env.example .env
-# Edite .env e insira: GROQ_API_KEY=gsk_...
 ```
 
-Com a chave definida, o HyDE usa `llama-3.1-8b-instant` — geração de Documento Hipotético de qualidade significativamente superior.
+Edite o arquivo `.env` e insira sua chave:
+
+```text
+GROQ_API_KEY=gsk_...sua-chave-aqui...
+```
+
+**6. Execute o pipeline**
+
+```bash
+python main.py
+```
+
+O sistema detecta automaticamente a presença da `GROQ_API_KEY` e usa o Groq. Sem a chave, cai para o modelo local sem nenhuma alteração necessária no código.
 
 ---
 
