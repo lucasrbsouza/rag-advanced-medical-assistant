@@ -14,7 +14,7 @@ Quando um paciente digita uma query coloquial como *"dor de cabeça latejante e 
 
 ## Arquitetura do Pipeline
 
-```
+```text
 Query Coloquial do Paciente
         │
         ▼  [Passo 2] HyDE — Query Transformation
@@ -55,7 +55,7 @@ index.hnsw.efSearch = 50
 
 Na busca K-Nearest Neighbors exata, todos os N vetores ficam em memória e a busca compara a query com **todos** eles:
 
-```
+```text
 RAM (KNN exato) = N × D × 4 bytes
 
 Exemplo: N=1.000.000 vetores, D=384
@@ -69,7 +69,7 @@ O HNSW constrói um grafo em camadas: a camada superior tem poucos nós altament
 
 A memória tem dois componentes:
 
-```
+```text
 RAM (HNSW) = vetores + overhead do grafo
 
   Vetores:  N × D × 4 bytes          (igual ao KNN)
@@ -86,7 +86,7 @@ Exemplo: N=1.000.000, D=384, M=16, n_camadas≈20
 `M` define quantas **arestas bidirecionais** cada nó mantém em cada camada do grafo.
 
 | M | Overhead de RAM | Recall@10 | Velocidade de busca |
-|---|-----------------|-----------|---------------------|
+| --- | --------------- | --------- | ------------------- |
 | 8 | +10% | ~95% | Mais rápida |
 | **16 (usado)** | **+83%** | **~98%** | **Balanceada** |
 | 32 | +166% | ~99,5% | Mais lenta por nó |
@@ -99,7 +99,7 @@ M maior → mais conexões → grafo mais denso → mais RAM → maior recall ma
 `ef_construction` define o tamanho da **lista de candidatos durante a construção** do grafo. Ele **não afeta o consumo de RAM em produção** — apenas o tempo de build e a qualidade final do grafo:
 
 | ef_construction | Tempo de build | Qualidade do grafo | RAM em produção |
-|----------------|----------------|--------------------|-----------------|
+| --- | --- | --- | --- |
 | 40 | Rápido | Menor precisão | Igual |
 | **200 (usado)** | **Moderado** | **Alta precisão** | **Igual** |
 | 800 | Lento | Máxima precisão | Igual |
@@ -108,7 +108,7 @@ ef_construction alto garante que cada nó inserido encontrou os melhores vizinho
 
 #### Comparação Final: HNSW vs KNN Exato
 
-```
+```text
 ┌──────────────────┬─────────────┬──────────────────┐
 │ Métrica          │  KNN Exato  │  HNSW (M=16)     │
 ├──────────────────┼─────────────┼──────────────────┤
@@ -131,13 +131,14 @@ ef_construction alto garante que cada nó inserido encontrou os melhores vizinho
 
 **Solução HyDE:** Em vez de vetorizar a query diretamente, o LLM é instruído a *alucinar* um trecho de manual médico técnico que responderia à pergunta. Esse Documento Hipotético usa a mesma terminologia dos documentos reais, posicionando o vetor de busca na região correta do espaço vetorial:
 
-```
+```text
 Query coloquial  →  embedding  →  região "leiga"   ← longe dos manuais
                                                            ↕ gap semântico
 Doc. Hipotético  →  embedding  →  região "técnica" ← próximo aos manuais ✓
 ```
 
 O sistema detecta automaticamente o modo de LLM disponível:
+
 - **Com `GROQ_API_KEY`**: usa `llama-3.1-8b-instant` via Groq (melhor qualidade)
 - **Sem chave**: usa `google/flan-t5-base` local (zero configuração)
 
@@ -174,6 +175,7 @@ python main.py
 ```
 
 **Sem nenhuma configuração adicional** — o sistema roda completamente local na primeira execução:
+
 - Embeddings: `paraphrase-multilingual-MiniLM-L12-v2` (HuggingFace, ~450 MB)
 - HyDE LLM: `google/flan-t5-base` (HuggingFace, ~990 MB)
 - Cross-Encoder: `ms-marco-MiniLM-L-6-v2` (HuggingFace, ~91 MB)
@@ -195,7 +197,7 @@ Com a chave definida, o HyDE usa `llama-3.1-8b-instant` — geração de Documen
 
 ## Estrutura do Projeto
 
-```
+```bash
 .
 ├── main.py                  # Orquestração do pipeline completo
 ├── requirements.txt         # Dependências Python
