@@ -176,14 +176,14 @@ python --version
 
 Todos os modelos rodam localmente. Nenhuma conta ou chave necessária.
 
-**1. Clone o repositório**
+#### 1. Clone o repositório
 
 ```bash
 git clone https://github.com/lucasrbsouza/rag-advanced-medical-assistant.git
 cd rag-advanced-medical-assistant
 ```
 
-**2. Crie e ative um ambiente virtual**
+#### 2. Crie e ative um ambiente virtual
 
 ```bash
 python -m venv .venv
@@ -191,13 +191,13 @@ source .venv/bin/activate        # Linux/Mac
 # .venv\Scripts\activate         # Windows
 ```
 
-**3. Instale as dependências**
+#### 3. Instale as dependências
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**4. Execute o pipeline**
+#### 4. Execute o pipeline
 
 ```bash
 python main.py
@@ -217,13 +217,13 @@ O índice HNSW também é construído e salvo em `data/` — execuções seguint
 
 O HyDE usa `llama-3.1-8b-instant` em vez do flan-t5 local, gerando Documentos Hipotéticos de qualidade significativamente superior. A API é **gratuita** (6.000 requisições/dia, sem cartão de crédito).
 
-**1–3.** Siga os mesmos passos da Opção 1.
+Siga os passos 1–3 da Opção 1 e continue:
 
-**4. Obtenha uma API key gratuita**
+#### 4. Obtenha uma API key gratuita
 
 Acesse [console.groq.com](https://console.groq.com) → crie uma conta → **API Keys** → **Create API Key**.
 
-**5. Configure a chave**
+#### 5. Configure a chave
 
 ```bash
 cp .env.example .env
@@ -235,7 +235,7 @@ Edite o arquivo `.env` e insira sua chave:
 GROQ_API_KEY=gsk_...sua-chave-aqui...
 ```
 
-**6. Execute o pipeline**
+#### 6. Execute o pipeline
 
 ```bash
 python main.py
